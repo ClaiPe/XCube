@@ -1,0 +1,19 @@
+include_configs:
+  - ../train/diffusion/diffusion_16x16x16_dense.yaml
+  - dales2.yaml
+
+name: 'dales2/diffusion_dense'
+
+vae_config: "configs/dales2/train_vae_dense.yaml"
+vae_checkpoint: "checkpoints/dales2/coarse_vae/last.ckpt"
+
+# adjust data setting
+voxel_size: 0.4  # 100m crop / 256 ≈ 0.4m per voxel
+crop_size: 100
+resolution: 256
+
+# adjust network
+network:
+  diffuser:
+    image_size: 32 # use during testing
+    attention_resolutions: [2, 4, 8]
