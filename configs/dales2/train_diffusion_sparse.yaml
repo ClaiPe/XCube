@@ -1,29 +1,37 @@
 include_configs:
-  - ../train/diffusion/diffusion_sparse.yaml
+  - ../train/diffusion/diffusion_128x128x128_sparse.yaml
   - dales2.yaml
 
 name: 'dales2/diffusion_sparse'
 
 # runtime defaults (used by train.py if CLI flags are omitted)
 gpus: 1
-batch_size: 8
-max_epochs: 100
+batch_size: 1
+max_epochs: 2
+model_precision: 16
 
 # semantic concat cond
-use_semantic_cond: true
+use_semantic_cond: false
 num_classes: 15
-conditioning_key: "concat" # "none", "adm", "concat"
+conditioning_key: "none" # "concat" "none", "adm", "concat"
+
+# use_semantic_cond: false
+# conditioning_key: "concat"
 
 use_pos_embed_world: false
 use_pos_embed_high: true
 
 vae_config: "configs/dales2/train_vae_sparse.yaml"
-vae_checkpoint: "checkpoints/dales2/fine_vae/last.ckpt"
+vae_checkpoint: "checkpoints/dales2/VAE_sparse/version_0/checkpoints/last.ckpt"
+
+resolution: 1024
+voxel_size: 0.1
 
 network:
   diffuser:
     image_size: [256, 256, 64]
-    model_channels: 64
+    model_channels: 32
+    num_res_blocks: 1
     channel_mult: [1, 2, 4, 4]
     attention_resolutions: [8, 16]
   cond_stage_model:

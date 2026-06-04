@@ -77,16 +77,17 @@ def generate_crops(xyz, labels, instances, normals, intensity, crop_size=100.0, 
         x_start += stride
 
 
-def voxelize_and_save(xyz, normals, labels, instances, intensity, voxel_size, out_path, build_splatting):
+def voxelize_and_save(xyz, normals, labels, instances, intensity, voxel_size, out_path, build_splatting, latent_voxel_size=None):
     """
-    xyz         : np.ndarray [N, 3]
-    normals     : np.ndarray [N, 3]
-    labels      : np.ndarray [N]   int   0-based
-    instances   : np.ndarray [N]   int
-    intensity   : np.ndarray [N]   float32
-    voxel_size  : float  (e.g. 0.4 for coarse, 0.1 for fine)
-    out_path    : str    where to write the .pkl file
-    build_splatting : bool   True for coarse, False for fine
+    xyz               : np.ndarray [N, 3]
+    normals           : np.ndarray [N, 3]
+    labels            : np.ndarray [N]   int   0-based
+    instances         : np.ndarray [N]   int
+    intensity         : np.ndarray [N]   float32
+    voxel_size        : float  (e.g. 0.4 for coarse, 0.1 for fine)
+    out_path          : str    where to write the .pkl file
+    build_splatting   : bool   True for coarse, False for fine
+    latent_voxel_size : float or None  if set, also compute latent-grid semantics at this resolution
     """
 
     # Centre the crop around zero so voxel indices start near the origin
@@ -151,6 +152,22 @@ def voxelize_and_save(xyz, normals, labels, instances, intensity, voxel_size, ou
         "instances": target_instance[:, 0].cpu(),
         "intensity": target_intensity.cpu(),
     }
+
+    # Compute latent-resolution semantic labels (used as conditioning by the diffusion model).
+    # The latent grid is voxel_size * 2^(tree_depth-1) coarser than the fine input grid.
+    # We approximate it here by building a coarse grid at latent_voxel_size and doing a
+    # nearest-neighbour semantic lookup from the fine input points.
+    if latent_voxel_size is not None:
+        latent_origins = [latent_voxel_size / 2.0] * 3
+        latent_grid = fvdb.sparse_grid_from_nearest_voxels_to_points(
+            JaggedTensor(input_xyz),
+            voxel_sizes=latent_voxel_size,
+            origins=latent_origins
+        )
+        latent_xyz = latent_grid.grid_to_world(latent_grid.ijk.float()).jdata
+        latent_semantic = semantic_from_points(latent_xyz, input_xyz, input_semantic).long()
+        save_dict["latent_semantics"] = latent_semantic[:, 0].cpu()
+
     torch.save(save_dict, out_path)
 
     # Compute grid resolution for folder names
@@ -213,10 +230,12 @@ if __name__ == "__main__":
                                   build_splatting=True)
 
                 # Fine: build_splatting=False
+                # also store latent_semantics at the coarse (latent) resolution for diffusion conditioning
                 voxelize_and_save(xyz_c, normals_c, labels_c, instances_c, intensity_c,
                                   voxel_size=VOXEL_SIZE_FINE,
                                   out_path=fine_path,
-                                  build_splatting=False)
+                                  build_splatting=False,
+                                  latent_voxel_size=VOXEL_SIZE_COARSE)
 
             split_list_path = os.path.join(OUTPUT_DIR, f"{split}.lst")
             with open(split_list_path, "w") as f:

@@ -314,7 +314,7 @@ if __name__ == '__main__':
         else:
             last_ckpt_path = Path(hyper_path).parent / "checkpoints" / "last.ckpt"
             logger_version_num = Path(hyper_path).parent.name if program_args.resume else None
-        logger = TensorBoardLogger('../checkpoints/', name=model_args.name,
+        logger = TensorBoardLogger('./checkpoints/', name=model_args.name,
                                    version=logger_version_num, default_hp_metric=False)
         # Call this property to assign the version early, so we don't have to wait for the model to be loaded
         print(f"Tensorboard logger, version number =", logger.version)
