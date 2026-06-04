@@ -5,11 +5,10 @@ include_configs:
 name: 'dales2/VAE_sparse'
 
 # runtime defaults (used by train.py if CLI flags are omitted)
-gpus: 1
 batch_size: 1
-max_epochs: 3
+max_epochs: 50
 
-model_precision: 16
+model_precision: 32
 
 # adjust data setting
 voxel_size: 0.1  # 100m crop / 1024 = 0.1m per voxel
@@ -33,4 +32,4 @@ cut_ratio: 16
 network:
   unet:
     params:
-      neck_bound: [64, 64, 16]
+      neck_bound: [32, 32, 8]

@@ -6,8 +6,8 @@ name: 'dales2/VAE_dense'
 
 # runtime defaults (used by train.py if CLI flags are omitted)
 batch_size: 1
-max_epochs: 10
-model_precision: 16
+max_epochs: 50
+model_precision: 32
 
 # adjust data setting
 voxel_size: 0.4  # 100m crop / 256 ≈ 0.4m per voxel

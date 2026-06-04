@@ -1,9 +1,8 @@
 _dales2_path: "./data/preprocessed"
 logger_type: "tb"
-gpus: 1
 
 train_dataset: Dales2Dataset
-train_val_num_workers: 2
+train_val_num_workers: 8
 train_kwargs:
   base_path: ${_dales2_path}
   resolution: ${resolution}

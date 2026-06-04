@@ -22,6 +22,7 @@ import random
 
 import pytorch_lightning as pl
 import torch
+torch.set_float32_matmul_precision("high")
 import wandb
 import yaml
 from loguru import logger as loguru_logger
