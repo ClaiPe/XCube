@@ -734,12 +734,47 @@ class Model(BaseModel):
         else:
             latents = self.random_sample_latents(grids, use_ddim=use_ddim, ddim_step=ddim_step, use_dpm=use_dpm, use_karras=use_karras, solver_order=solver_order,
                                                      cond_dict=cond_dict, guidance_scale=guidance_scale)
+            
+
+        ####
+        print("=== LATENTS ===")
+        print(type(latents))
+
+        if hasattr(latents, "grid"):
+            print("latent grid count:", latents.grid.grid_count)
+            print("latent voxels:", latents.grid[0].ijk.jdata.shape)
+
+        if hasattr(latents, "feature"):
+            print("latent features:", latents.feature.jdata.shape)
+        ####
+
         # decode
+
+        ####
+        print("=== BEFORE DECODE ===")
+        print("latent voxels:", latents.grid[0].ijk.jdata.shape)
+        ###
+
         res = self.vae.unet.FeaturesSet()
         if guided_grid is None:
             res, output_x = self.vae.unet.decode(res, latents, is_testing=True)
         else:
             res, output_x = self.vae.unet.decode(res, latents, guided_grid)
+
+        ####
+        print("=== AFTER DECODE ===")
+
+        print("output voxels:",
+            output_x.grid[0].ijk.jdata.shape)
+
+        print("normal features:",
+            len(res.normal_features))
+
+        print("semantic features:",
+            len(res.semantic_features))
+        
+        ####
+        
         # TODO: add SDF output
         return res, output_x
     

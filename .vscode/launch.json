@@ -5,17 +5,26 @@
     "version": "0.2.0",
     "configurations": [
         
+        
 
         {
-            "name": "VAE Dense training",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "train.py",
-            "console": "integratedTerminal",
-            "args": [
-                "./configs/dales2/train_diffusion_dense.yaml" 
-            ],
-            "justMyCode": false
-        }
-    ]
+    "name": "Inference",
+    "type": "debugpy",
+    "request": "launch",
+    "program": "${workspaceFolder}/inference/sample_dales2.py",
+    "console": "integratedTerminal",
+    "cwd": "${workspaceFolder}",
+    "env": {
+        "PYTHONPATH": "${workspaceFolder}"
+    },
+    "args": [
+        "none",
+        "--total_len", "2",
+        "--batch_len", "1",
+        "--ema",
+        "--use_ddim",
+        "--ddim_step", "30"
+    ],
+    "justMyCode": false
+}
 }

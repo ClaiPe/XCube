@@ -9,9 +9,9 @@ vae_checkpoint: "checkpoints/dales2/VAE_dense/version_0/checkpoints/last.ckpt"
 
 model_precision: 32
 
-batch_size: 6
+batch_size: 5
 accumulate_grad_batches: 4
-max_epochs: 50
+max_epochs: 1
 
 # adjust data setting
 voxel_size: 0.4  # 100m crop / 256 ≈ 0.4m per voxel

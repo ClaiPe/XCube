@@ -6,7 +6,7 @@ name: 'dales2/VAE_dense'
 
 # runtime defaults (used by train.py if CLI flags are omitted)
 batch_size: 1
-max_epochs: 50
+max_epochs: 1
 model_precision: 32
 
 # adjust data setting
@@ -15,13 +15,16 @@ resolution: 256
 
 # adjust input setting - use semantic and intensity
 use_input_semantic: true
+use_input_normal: true
 use_input_intensity: true
 num_semantic: 15
 dim_semantic: 32
 
 # adjust supervision - add semantic supervision
 supervision:
+  structure_weight: 20.0 
   semantic_weight: 20.0
+  normal_weight: 300.0
 
 # adjust network
 cut_ratio: 64

@@ -481,7 +481,52 @@ class StructPredictionNet(nn.Module):
                 else:
                     x, _ = block(x)
             res.structure_features[feat_depth] = struct_conv(x)
+
+            ####
+            logits = res.structure_features[feat_depth].feature.jdata
+
+            exist = logits[:, 0]
+            nonexist = logits[:, 1]
+
+            print(
+                f"depth={feat_depth}",
+                f"voxels={logits.shape[0]}",
+                f"exist_mean={exist.mean().item():.4f}",
+                f"nonexist_mean={nonexist.mean().item():.4f}",
+                f"kept={(exist > nonexist).sum().item()}"
+            )
+            ####
+
             struct_decision = self.struct_to_mask(res.structure_features[feat_depth])
+
+            ###
+            print(
+            "depth =", feat_depth,
+            "voxels =", x.grid.total_voxels,
+            "kept =", struct_decision.jdata.sum().item(),
+            "total =", struct_decision.jdata.numel())
+
+            sf = res.structure_features[feat_depth]
+
+            print(
+                "structure features",
+                feat_depth,
+                sf.feature.jdata.min().item(),
+                sf.feature.jdata.max().item(),
+                sf.feature.jdata.mean().item()
+            )
+
+            print(
+            "depth",
+            feat_depth,
+            "kept",
+            struct_decision.jdata.sum().item(),
+            "/",
+            struct_decision.jdata.numel()        )
+
+            ###
+
+
             if feat_depth != self.num_blocks - 1 and self.unstable_cutoff:
                 # compute the dense resolution
                 current_voxel_bound = [res * 2 ** (self.num_blocks - 1 - feat_depth) for res in self.voxel_bound]

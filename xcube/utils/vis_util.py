@@ -74,3 +74,41 @@ waymo_palette = color.get_cmap_array('Set2')
 # Change the purple and green color
 waymo_palette[3] = color.get_cmap_array('Set3')[9]
 waymo_palette[4] = color.get_cmap_array('Set1')[2]
+
+
+
+## Dales 2 ##
+DALES2_CATEGORY_NAMES = [
+    "ground", "vegetation", "car", "powerline", "fence", "tree", "pickup", 
+         "van_truck", "heavy_duty", "utility_pole", "light_pole", "traffic_pole",
+         "habitat", "complex", "annex"
+]
+
+DALES2_MAPPED = {
+    0: ["ground"],   
+    1: ["vegetation"],
+    2: ["car"], 
+    3: ["powerline"], 
+    4: ["fence"],
+    5: ["tree"],
+    6: ["pickup"],
+    7: ["van_truck"],
+    8: ["heavy_duty"],
+    9: ["utility_pole"],
+    10: ["light_pole"],
+    11: ["traffic_pole"],
+    12: ["habitat"],
+    13: ["complex"],
+    14: ["annex"]
+}
+
+
+dales2_mapping = np.zeros(15, dtype=np.int32)
+for dkey, darr in DALES2_MAPPED.items():
+    for d in darr:
+        dales2_mapping[DALES2_CATEGORY_NAMES.index(d)] = dkey
+
+dales2_palette = color.get_cmap_array('Set2')
+# Change the purple and green color
+dales2_palette[3] = color.get_cmap_array('Set3')[9]
+dales2_palette[4] = color.get_cmap_array('Set1')[2]

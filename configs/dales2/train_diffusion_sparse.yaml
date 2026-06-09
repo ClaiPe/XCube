@@ -5,8 +5,8 @@ include_configs:
 name: 'dales2/diffusion_sparse'
 
 # runtime defaults (used by train.py if CLI flags are omitted)
-batch_size: 8
-max_epochs: 50
+batch_size: 5
+max_epochs: 1
 model_precision: 32
 
 # semantic concat cond
