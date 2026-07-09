@@ -405,7 +405,7 @@ class StructPredictionNet(nn.Module):
     @classmethod
     def struct_to_mask(cls, struct_pred: fvnn.VDBTensor):
         # 0 is exist, 1 is non-exist
-        mask = struct_pred.feature.jdata[:, 0] > struct_pred.feature.jdata[:, 1]
+        mask = struct_pred.feature.jdata[:, 0] > struct_pred.feature.jdata[:, 1]        
         return struct_pred.grid.jagged_like(mask)
 
     @classmethod
@@ -483,46 +483,44 @@ class StructPredictionNet(nn.Module):
             res.structure_features[feat_depth] = struct_conv(x)
 
             ####
-            logits = res.structure_features[feat_depth].feature.jdata
-
-            exist = logits[:, 0]
-            nonexist = logits[:, 1]
-
-            print(
-                f"depth={feat_depth}",
-                f"voxels={logits.shape[0]}",
-                f"exist_mean={exist.mean().item():.4f}",
-                f"nonexist_mean={nonexist.mean().item():.4f}",
-                f"kept={(exist > nonexist).sum().item()}"
-            )
+            # logits = res.structure_features[feat_depth].feature.jdata
+            # exist = logits[:, 0]
+            # nonexist = logits[:, 1]
+            # print(
+            #     f"depth={feat_depth}",
+            #     f"voxels={logits.shape[0]}",
+            #     f"exist_mean={exist.mean().item():.4f}",
+            #     f"nonexist_mean={nonexist.mean().item():.4f}",
+            #     f"kept={(exist > nonexist).sum().item()}"
+            # )
             ####
 
             struct_decision = self.struct_to_mask(res.structure_features[feat_depth])
 
-            ###
-            print(
-            "depth =", feat_depth,
-            "voxels =", x.grid.total_voxels,
-            "kept =", struct_decision.jdata.sum().item(),
-            "total =", struct_decision.jdata.numel())
+            # ###
+            # print(
+            # "depth =", feat_depth,
+            # "voxels =", x.grid.total_voxels,
+            # "kept =", struct_decision.jdata.sum().item(),
+            # "total =", struct_decision.jdata.numel())
 
-            sf = res.structure_features[feat_depth]
+            # sf = res.structure_features[feat_depth]
 
-            print(
-                "structure features",
-                feat_depth,
-                sf.feature.jdata.min().item(),
-                sf.feature.jdata.max().item(),
-                sf.feature.jdata.mean().item()
-            )
+            # print(
+            #     "structure features",
+            #     feat_depth,
+            #     sf.feature.jdata.min().item(),
+            #     sf.feature.jdata.max().item(),
+            #     sf.feature.jdata.mean().item()
+            # )
 
-            print(
-            "depth",
-            feat_depth,
-            "kept",
-            struct_decision.jdata.sum().item(),
-            "/",
-            struct_decision.jdata.numel()        )
+            # print(
+            # "depth",
+            # feat_depth,
+            # "kept",
+            # struct_decision.jdata.sum().item(),
+            # "/",
+            # struct_decision.jdata.numel()        )
 
             ###
 
@@ -539,6 +537,9 @@ class StructPredictionNet(nn.Module):
                     
             res.structure_grid[feat_depth] = self.up_sample0(x, struct_decision).grid
             feat_depth -= 1
+        
+        if all(~struct_decision.jdata): 
+            struct_decision.jdata = ~struct_decision.jdata
         x = self.up_sample0(x, struct_decision)
         
         if self.with_normal_branch:

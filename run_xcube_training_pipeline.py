@@ -27,9 +27,9 @@ def run_step(step_index: int, total_steps: int, config_path: str) -> int:
 
 def main() -> int:
     configs: List[Tuple[str, str]] = [
-        ("train VAE dense", "./configs/dales2/train_vae_dense.yaml"),
+        #("train VAE dense", "./configs/dales2/train_vae_dense.yaml"),
+        #("train diffusion dense", "./configs/dales2/train_diffusion_dense.yaml"),
         ("train VAE sparse", "./configs/dales2/train_vae_sparse.yaml"),
-        ("train diffusion dense", "./configs/dales2/train_diffusion_dense.yaml"),
         ("train diffusion sparse", "./configs/dales2/train_diffusion_sparse.yaml"),
     ]
 

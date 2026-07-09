@@ -68,7 +68,7 @@ if known_args.extract_mesh:
 # begin sample pcs for evaluation
 known_args.category = "dales2"
 logger.info(f"Sampling from XCube on {known_args.category} ...")
-save_folder = f"./results/{known_args.category}_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}"
+save_folder = f"./results/{known_args.category}_{datetime.now().strftime('%Y-%m-%d_%H-%M')}"
 logger.info(f"Saving results to {save_folder}")
 if not os.path.exists(save_folder):
     os.makedirs(save_folder)
@@ -103,11 +103,12 @@ with torch.no_grad():
                                                     )
         
         # get result grids
-        for batch_idx in range(output_x.grid.grid_count):
+        # for batch_idx in range(output_x.grid.grid_count):
+        for batch_idx in range(output_x_coarse.grid.grid_count):
             # Coarse always has normal + semantic features (key is -1 from decode loop).
             coarse_normal_feat = res_coarse.normal_features[-1].feature[batch_idx].jdata
             coarse_semantic_feat = res_coarse.semantic_features[-1].feature[batch_idx].jdata
-            # Fine may produce an empty grid (OOM / undertrained): fall back to coarse features.
+            #  Fine may produce an empty grid (OOM / undertrained): fall back to coarse features.
             fine_normal_feat = (
                 res.normal_features[-1].feature[batch_idx].jdata
                 if res.normal_features

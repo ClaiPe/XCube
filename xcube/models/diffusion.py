@@ -737,23 +737,23 @@ class Model(BaseModel):
             
 
         ####
-        print("=== LATENTS ===")
-        print(type(latents))
+        # print("=== LATENTS ===")
+        # print(type(latents))
 
-        if hasattr(latents, "grid"):
-            print("latent grid count:", latents.grid.grid_count)
-            print("latent voxels:", latents.grid[0].ijk.jdata.shape)
+        # if hasattr(latents, "grid"):
+        #     print("latent grid count:", latents.grid.grid_count)
+        #     print("latent voxels:", latents.grid[0].ijk.jdata.shape)
 
-        if hasattr(latents, "feature"):
-            print("latent features:", latents.feature.jdata.shape)
-        ####
+        # if hasattr(latents, "feature"):
+        #     print("latent features:", latents.feature.jdata.shape)
+        # ####
 
-        # decode
+        # # decode
 
-        ####
-        print("=== BEFORE DECODE ===")
-        print("latent voxels:", latents.grid[0].ijk.jdata.shape)
-        ###
+        # ####
+        # print("=== BEFORE DECODE ===")
+        # print("latent voxels:", latents.grid[0].ijk.jdata.shape)
+        # ###
 
         res = self.vae.unet.FeaturesSet()
         if guided_grid is None:
@@ -761,19 +761,19 @@ class Model(BaseModel):
         else:
             res, output_x = self.vae.unet.decode(res, latents, guided_grid)
 
-        ####
-        print("=== AFTER DECODE ===")
+        # ####
+        # print("=== AFTER DECODE ===")
 
-        print("output voxels:",
-            output_x.grid[0].ijk.jdata.shape)
+        # print("output voxels:",
+        #     output_x.grid[0].ijk.jdata.shape)
 
-        print("normal features:",
-            len(res.normal_features))
+        # print("normal features:",
+        #     len(res.normal_features))
 
-        print("semantic features:",
-            len(res.semantic_features))
+        # print("semantic features:",
+        #     len(res.semantic_features))
         
-        ####
+        # ####
         
         # TODO: add SDF output
         return res, output_x

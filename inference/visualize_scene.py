@@ -5,7 +5,7 @@ import torch
 import trimesh
 import numpy as np
 import point_cloud_utils as pcu
-from xcube.utils.vis_util import waymo_palette, waymo_mapping
+from xcube.utils.vis_util import dales2_palette, dales2_mapping
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-p', "--path", type=str, required=True)
@@ -24,8 +24,8 @@ coarse_xyz = result_dict["coarse_xyz"]
 coarse_normal = result_dict["coarse_normal"]
 coarse_normal_color = coarse_normal * 0.5 + 0.5
 coarse_semantic = result_dict["coarse_semantic"]
-coarse_semantic = waymo_mapping[coarse_semantic]
-coarse_semantic_color = waymo_palette[coarse_semantic]
+coarse_semantic = dales2_mapping[coarse_semantic]
+coarse_semantic_color = dales2_palette[coarse_semantic]
 
 pc = ps.register_point_cloud(f"Coarse Point", coarse_xyz)
 pc.add_color_quantity("semantic", coarse_semantic_color, enabled=True)
@@ -35,8 +35,8 @@ fine_xyz = result_dict["fine_xyz"]
 fine_normal = result_dict["fine_normal"]
 fine_normal = fine_normal / (np.linalg.norm(fine_normal, axis=1, keepdims=True) + 1e-6)
 fine_semantic = result_dict["fine_semantic"]
-fine_semantic = waymo_mapping[fine_semantic]
-fine_semantic_color = waymo_palette[fine_semantic]
+fine_semantic = dales2_mapping[fine_semantic]
+fine_semantic_color = dales2_palette[fine_semantic]
 
 pc = ps.register_point_cloud(f"Fine Point", fine_xyz)
 fine_normal_color = fine_normal * 0.5 + 0.5

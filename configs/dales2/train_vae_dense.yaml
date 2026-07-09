@@ -5,13 +5,13 @@ include_configs:
 name: 'dales2/VAE_dense'
 
 # runtime defaults (used by train.py if CLI flags are omitted)
-batch_size: 1
-max_epochs: 1
+batch_size: 16
+max_epochs: 30
 model_precision: 32
 
 # adjust data setting
-voxel_size: 0.4  # 100m crop / 256 ≈ 0.4m per voxel
-resolution: 256
+voxel_size: 5  
+resolution: 20
 
 # adjust input setting - use semantic and intensity
 use_input_semantic: true
@@ -24,7 +24,7 @@ dim_semantic: 32
 supervision:
   structure_weight: 20.0 
   semantic_weight: 20.0
-  normal_weight: 300.0
+  # normal_weight: 300.0
 
 # adjust network
 cut_ratio: 64
@@ -34,7 +34,7 @@ use_hash_tree: false # use_hash_tree conflict with remain_h
 network:
   unet:
     params:
-      neck_bound: [8, 8, 8]
+      neck_bound: [16, 16, 16]
       pooling_level: [3] # corresponding to remain_h
       use_checkpoint: true # gradient checkpointing trades compute for memory
       f_maps: 32

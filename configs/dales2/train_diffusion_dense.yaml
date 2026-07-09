@@ -11,12 +11,12 @@ model_precision: 32
 
 batch_size: 5
 accumulate_grad_batches: 4
-max_epochs: 1
+max_epochs: 30
 
 # adjust data setting
-voxel_size: 0.4  # 100m crop / 256 ≈ 0.4m per voxel
+voxel_size: 5  
 crop_size: 100
-resolution: 256
+resolution: 20
 
 learning_rate:
   init: 1.0e-5
@@ -24,6 +24,6 @@ learning_rate:
 # adjust network
 network:
   diffuser:
-    image_size: 32 # use during testing
-    model_channels: 160
-    attention_resolutions: [1, 2, 4, 8]
+    image_size: 32 # use during testing (for the inference)
+#    model_channels: 160
+    attention_resolutions: [2, 4, 8]

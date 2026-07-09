@@ -179,9 +179,9 @@ if __name__ == "__main__":
     INPUT_DIR  = "data/raw/dales2"   
     OUTPUT_DIR = "data/preprocessed"  #
     CROP_SIZE  = 100.0   # XY window size in metres
-    STRIDE     = 80.0    # sliding window stride in metres
-    VOXEL_SIZE_COARSE = 0.4  # 0.4 m  →  100m / 0.4 = 256 voxels
-    VOXEL_SIZE_FINE   = 0.1  # 0.1 m  →  100m / 0.1 = 1024 voxels
+    STRIDE     = CROP_SIZE    # sliding window stride in metres
+    VOXEL_SIZE_COARSE = 5  # 
+    VOXEL_SIZE_FINE   = 0.3125  
 
 
     # coarse_grid_res = get_grid_resolution(CROP_SIZE, VOXEL_SIZE_COARSE)
@@ -195,8 +195,8 @@ if __name__ == "__main__":
         # Use dynamic folder names based on grid resolution
         # coarse_dir = os.path.join(OUTPUT_DIR, f"{coarse_grid_res}", split)
         # fine_dir   = os.path.join(OUTPUT_DIR, f"{fine_grid_res}", split)
-        coarse_dir = os.path.join(OUTPUT_DIR, f"256", split)
-        fine_dir   = os.path.join(OUTPUT_DIR, f"1024", split)
+        coarse_dir = os.path.join(OUTPUT_DIR, f"20", split)
+        fine_dir   = os.path.join(OUTPUT_DIR, f"320", split)
         os.makedirs(coarse_dir, exist_ok=True)
         os.makedirs(fine_dir,   exist_ok=True)
 

@@ -3,8 +3,7 @@
     // Hover to view descriptions of existing attributes.
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
-    "configurations": [
-        
+    "configurations": [      
         
 
         {
@@ -26,5 +25,22 @@
         "--ddim_step", "30"
     ],
     "justMyCode": false
+},
+
+    {
+    "name": "Train",
+    "type": "debugpy",
+    "request": "launch",
+    "program": "train.py",
+    "console": "integratedTerminal",
+    "env": {
+        "PYTHONPATH": "${workspaceFolder}"
+    },
+    "args": [
+        "./configs/dales2/train_diffusion_dense.yaml",
+    ],
+    "justMyCode": false
 }
+
+
 }
